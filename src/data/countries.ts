@@ -549,6 +549,7 @@ const countries: Country[] = [
     name: 'Kosovo',
     code: 'xk',
     dial_code: '+383',
+  },
   {
     name: 'Kuwait',
     code: 'kw',
