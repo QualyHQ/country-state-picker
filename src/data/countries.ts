@@ -546,6 +546,10 @@ const countries: Country[] = [
     dial_code: '+82',
   },
   {
+    name: 'Kosovo',
+    code: 'xk',
+    dial_code: '+383',
+  {
     name: 'Kuwait',
     code: 'kw',
     dial_code: '+965',
@@ -689,6 +693,11 @@ const countries: Country[] = [
     name: 'Montserrat',
     code: 'ms',
     dial_code: '+1664',
+  },
+  {
+    name: 'Montenegro',
+    code: 'me',
+    dial_code: '+382',
   },
   {
     name: 'Morocco',
@@ -919,6 +928,11 @@ const countries: Country[] = [
     name: 'Senegal',
     code: 'sn',
     dial_code: '+221',
+  },
+    {
+    name: 'Serbia',
+    code: 'rs',
+    dial_code: '+381',
   },
   {
     name: 'Seychelles',
