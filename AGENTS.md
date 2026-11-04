@@ -21,6 +21,23 @@ Developers often run several sessions at once; keep CPU, memory and disk quiet.
 - **Processes:** stop every background process you started (test runners, mongod, dev servers,
   watchers) before finishing, and give long waits a time limit. Never stop processes another
   session or the developer started; report them instead.
+- **Secrets:** never print a secret value: not `.env` contents, Secret Manager versions, CI
+  secrets or Cloud Build trigger substitutions (they hold plaintext GitHub tokens). Print key
+  names only, and never paste a value into a commit, PR, log or chat.
+- **Words users see** (UI, emails, docs, templates, schemas): sector-agnostic, with no education
+  terms (say contact, supplier or partner, item, tenant), and say "split", never "commission".
+- **Qualy MCP:** when it is available, use it before guessing. It reaches product analytics
+  (usage, funnels, session recordings), support tickets and chats, and production data through
+  staff impersonation. Use it to size a feature by real usage, reproduce a reported issue, shape
+  test fixtures and mocks like real accounts, check a script or migration dry run, and judge the
+  risk of a deploy.
+  - Read-only: no writes, sends, approvals or money actions through it unless the user asked for
+    that specific action. If unsure whether a call reads or writes, stop and ask.
+  - Least access: one tenant and the fewest records the task needs. Say which tenant and why in
+    the session, so the impersonation audit log is explainable.
+  - Never copy real data out: no names, emails, amounts, ids or documents in fixtures, tests,
+    commits, PR text, screenshots or logs. Take aggregates and shapes, and write synthetic data.
+  - Never from CI.
 - **Machine setup:** if installs or tests are unexpectedly slow, run
   `node scripts/dev-machine-check.mjs` from QualyHQ/standards and pass on what it reports
   (indexing and antivirus scanning of `node_modules` are the usual cause).
@@ -36,8 +53,24 @@ Developers often run several sessions at once; keep CPU, memory and disk quiet.
   `VITEST_MAX_WORKERS=1 npx vitest related --run <files>`); and the whole suite, one suite at a
   time, when you changed shared code (stores, composables, utils, config, `package.json`). CI is
   the confirmation, not the first test. One PR per real change, not one per tweak.
-- **PR template:** fill it: Summary under 4 lines, everything long in Details, summarise any ADR
-  in the 3-line block, apply the risk label (`risk:money`, `risk:auth`, `risk:migration`).
+- **Format before you push.** A fresh clone or worktree has no git hooks until `npm ci` runs
+  `prepare`, so nothing formats your commits there. Run `npm run lint` (and `format:check` where it
+  exists) before every push; `npm run lint:fix` fixes most of it.
+- **Advisories:** a high or critical production advisory fails CI. Fix it by upgrading; an
+  exception in `package.json#qualyAdvisoryExceptions` (id, owner, reason, expiry) only when no fix
+  exists or the fix is younger than the 3-day release age.
+- **Review before ready.** Get an independent review of every non-trivial change before
+  `gh pr ready`: Codex or Kimi through the `peer` skill when you have it, otherwise a fresh
+  sub-agent given the diff and the goal, not your conclusions. UI work also gets the critic pass
+  in the voice of Don Norman and Steve Krug, and a new feature, its name or its copy gets Rory
+  Sutherland's read (questions in the kit's `docs/design-practices.md` "Critic pass"). Reviews
+  correct the change; they do not widen it.
+- **Open the PR complete, in one command:** `gh pr create --draft --body-file <file>`, plus
+  `--label <risk>` only when the change needs one: `risk:money` when it touches money paths (CI
+  fails without it), `risk:auth` when it changes who can do what, `risk:migration` when a script
+  or migration must run. The body follows the template: `## Summary` first, 2 to 4 lines on why,
+  filled; long text in `## Details`; any ADR in its 3-line block. The template and label checks
+  run when the PR opens, so a body or label added afterwards leaves a red run behind.
 - **After opening a PR:** watch it and fix it yourself until it merges, without being asked. In
   the Claude Code desktop app, turn on the PR's Auto-fix and CI monitor as soon as it is open;
   other agents keep checking. Merge on `ci-gate`. Fix each failure on the same branch: reproduce
