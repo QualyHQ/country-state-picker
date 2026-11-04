@@ -20,6 +20,11 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
   substitutions, which hold plaintext GitHub tokens). Key names only.
 - **Words users see:** sector-agnostic, no education terms (contact, supplier or partner, item,
   tenant); say "split", never "commission".
+- **No regressions:** we move money, so tests lock in current behaviour and a behaviour change
+  must turn something red. Cover every path and money edge case, not the happy path; a bug fix
+  ships with its test (standards `docs/agents/testing.md`).
+- **ADRs:** a big feature, a money or auth change, or anything hard to reverse gets an ADR,
+  `Proposed` before you build and accepted by the owner (standards `docs/agents/adr.md`).
 - **Lint and CI rules:** check what lint, the hooks and CI already enforce before writing code, and
   never silence them (`eslint-disable`, `@ts-ignore`, skipped tests) to get green.
 - **Qualy MCP** (product analytics, tickets, production data by impersonation): use it before
