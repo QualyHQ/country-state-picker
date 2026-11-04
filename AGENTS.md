@@ -29,15 +29,22 @@ Developers often run several sessions at once; keep CPU, memory and disk quiet.
 - **Qualy MCP:** when it is available, use it before guessing. It reaches product analytics
   (usage, funnels, session recordings), support tickets and chats, and production data through
   staff impersonation. Use it to size a feature by real usage, reproduce a reported issue, shape
-  test fixtures and mocks like real accounts, check a script or migration dry run, and judge the
+  test fixtures and mocks like real accounts (data shapes and product usage across several
+  tenants, business types and countries), check a script or migration dry run, and judge the
   risk of a deploy.
   - Read-only: no writes, sends, approvals or money actions through it unless the user asked for
     that specific action. If unsure whether a call reads or writes, stop and ask.
-  - Least access: one tenant and the fewest records the task needs. Say which tenant and why in
-    the session, so the impersonation audit log is explainable.
+  - Least access: only the tenants and records the task needs; several when comparing data sets
+    is the point. Say which tenants and why in the session, so the impersonation audit log is
+    explainable.
   - Never copy real data out: no names, emails, amounts, ids or documents in fixtures, tests,
     commits, PR text, screenshots or logs. Take aggregates and shapes, and write synthetic data.
   - Never from CI.
+- **Instrumentation is part of the feature.** When you build or change something people use,
+  decide in the same change what we will want to know about it (is it used, by whom, where do
+  people stall or fail) and add the events for it, following the service and frontend rules
+  below. Name the question each new event answers in the PR's Details. Skip it, and say so, when
+  nothing would be decided from the data: internal tools, automated jobs, plumbing.
 - **Machine setup:** if installs or tests are unexpectedly slow, run
   `node scripts/dev-machine-check.mjs` from QualyHQ/standards and pass on what it reports
   (indexing and antivirus scanning of `node_modules` are the usual cause).
