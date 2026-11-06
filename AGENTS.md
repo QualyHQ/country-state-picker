@@ -17,7 +17,8 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
 - **Processes:** stop every background process you started and time-limit long waits. Never stop
   one you did not start; report it.
 - **Secrets:** never print a secret value (`.env`, Secret Manager, CI secrets, Cloud Build trigger
-  substitutions, which hold plaintext GitHub tokens). Key names only.
+  substitutions, which hold plaintext GitHub tokens). Key names only. A workflow that reads a
+  secret at run time gets its own narrow one (standards `docs/agents/runtime-secrets.md`).
 - **Words users see:** sector-agnostic, no education terms (contact, supplier or partner, item,
   tenant); say "split", never "commission".
 - **No regressions:** we move money, so tests lock in current behaviour and a behaviour change
@@ -45,4 +46,9 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
   Claude Code desktop app, turn on Auto-fix and CI monitor as soon as it opens. Merge on `ci-gate`.
   Reproduce each failure locally, fix the cause, batch related fixes into one push. Never skip a
   test or bypass a gate; ask the owner after 3 failed attempts or when it needs a product decision.
+- **Tickets and ideas** (support-core ADR-062): a PR that fixes a support ticket carries
+  `Fixes: TKT-…` in its body (`Ticket: TKT-…` for related work); one that builds an idea carries
+  `Implements: IDEA-…` (`Idea: IDEA-…` for related). Then confirm the link with the Qualy MCP
+  `ticket_link_add`. The ticket follows the PR on its own; never close a ticket or email a customer
+  because a PR merged.
 <!-- /agent-rules:core -->
