@@ -22,6 +22,9 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
 - **Secrets:** never print a secret value (`.env`, Secret Manager, CI secrets, Cloud Build trigger
   substitutions, which hold plaintext GitHub tokens). Key names only. A workflow that reads a
   secret at run time gets its own narrow one (standards `docs/agents/runtime-secrets.md`).
+- **Credentials:** never a personal token. `npm ci` fails with 401/403 on `@qualyhq` packages? Call
+  the support-core MCP tool `dev_credential_issue` (`scope: npm:qualyhq:read`, a reason) and run the
+  `usage` command it returns; it lasts 1 h (standards `docs/agents/credentials.md`).
 - **Words users see:** sector-agnostic, no education terms (contact, supplier or partner, item,
   tenant); say "split", never "commission".
 - **No regressions:** we move money, so tests lock in current behaviour and a behaviour change
@@ -52,6 +55,8 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
   Claude Code desktop app, turn on Auto-fix and CI monitor as soon as it opens. Merge on `ci-gate`.
   Reproduce each failure locally, fix the cause, batch related fixes into one push. Never skip a
   test or bypass a gate; ask the owner after 3 failed attempts or when it needs a product decision.
+- **Push in batches:** commit locally as often as you like, push when a piece of work is done,
+  not after every small commit. Each push of a ready PR is a full CI run.
 - **One push per round on a ready PR:** every push reruns its whole CI tier. Iterate in the draft;
   collect all fixes (review, CI, follow-ups) into one push; never push to see what CI says. More
   coming? `gh pr ready --undo` until it's in.
