@@ -1,0 +1,14 @@
+name: PR author assignment
+
+# Metadata only: the reusable workflow never checks out PR code.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  assign:
+    uses: QualyHQ/standards/.github/workflows/pr-author-assignment.yml@6152d592954d1745825efb1b64e4b20689652ef2 # v1.48.0
