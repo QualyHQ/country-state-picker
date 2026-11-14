@@ -1,162 +1,39 @@
 # Country State Picker
 
-NPM package to get the list of countries and their states.
+Qualy’s checkout of the `country-state-picker` country/state lookup library. It contains static data and pure lookup functions, not a UI picker or an address-validation service. The package metadata retains the upstream author and ISC license.
 
-[![npm version](https://badge.fury.io/js/country-state-picker.svg)](https://badge.fury.io/js/country-state-picker)
+## Install and use
 
-## Installation
-
-`npm i country-state-picker --save`
-
-## Usage
-
-### `getCountries()`
-
-This function will return the array of all the countries.
-
-#### Output
-
-```javascript
-[
-    {
-        "name": "Afghanistan",
-        "code": "af",
-        "dial_code": "+93"
-    },
-    {
-        "name": "Albania",
-        "code": "al",
-        "dial_code": "+355"
-    },
-    {
-        "name": "Algeria",
-        "code": "dz",
-        "dial_code": "+213"
-    },
-    {
-        "name": "Andorra",
-        "code": "ad",
-        "dial_code": "+376"
-    }
-  ...
-]
+```bash
+npm install country-state-picker
 ```
 
----
+That command installs the public upstream package; it does not guarantee the same revision as this Qualy fork. Consumers requiring this checkout’s changes must pin their approved fork revision.
 
-### `getStates(<country_code>)`
+```js
+const { getCountries, getCountry, getStates, getFilteredCountries } = require('country-state-picker');
 
-This function will return the array of all the states of a given country.
-
-### Example
-
-To get the list of all the states of INDIA, the function call will look like:
-
-```javascript
-let states = getStates('in');
-
-console.log(states)
+getCountries();
+getCountry('au');
+getCountry('Australia');
+getStates('au');
+getFilteredCountries(['au', 'in']);
 ```
 
-#### Output
+- `getCountries()` returns the backing country array, with `name`, lowercase `code` and `dial_code`. Treat it as read-only: it is not cloned.
+- `getCountry(value)` returns the first case-insensitive exact match by name, country code or dial code, or `undefined`. Calling codes are not unique; this is not phone-number parsing.
+- `getFilteredCountries(values)` returns matching countries in dataset order, rather than argument order.
+- `getStates(codeOrCountry)` accepts a case-insensitive string code or a country object and returns its state-name array, or `[]` for an unknown code. Object codes are used as supplied. The returned array is not cloned.
 
-```javascript
-[
-    "Assam",
-    "Goa",
-    "Madhya Pradesh",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "National Capital Territory of Delhi",
-    "Sikkim",
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Bihar",
-    "Chhattisgarh",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jammu and Kashmir",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Maharashtra",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Tamil Nad",
-    "Uttarakhand",
-    "Telangana",
-    "Tripura",
-    "Andaman and Nicobar Islands",
-    "Chandigarh",
-    "Dadra and Nagar Haveli",
-    "Daman and Di",
-    "Lakshadweep",
-    "Puducherry",
-    "Uttar Pradesh",
-    "West Bengal"
-]
+The bundled [country data](src/data/countries.ts) and [state data](src/data/states.ts) are a static snapshot. Check them before relying on administrative names, boundaries or current dial-code coverage. This library does not certify an address or jurisdiction.
+
+## Development
+
+```bash
+npm ci
+npm run lint
+npm run build
+npm test
 ```
 
-### `getCountry(<country_name | country_code | dial_code>)`
-
-This function will return the country corresponding to the argument passed.
-
-### Example
-
-To get the country having dial code "+91", the function call will look like:
-
-```javascript
-let country = getCountry('+91');
-
-console.log(country)
-```
-
-#### Output
-
-```javascript
-{
-    "name": "India",
-    "code": "in",
-    "dial_code": "+91"
-}
-```
-
-### `getFilteredCountries([<country_name | country_code | dial_code>])`
-
-This function will receive an array of arguments and return the array of countries corresponding to the argument.
-
-### Example
-
-To get only India, USA and Australia country objects, the function call will look like:
-
-```javascript
-let filteredCountries = getFilteredCountries(['+91', 'us', 'Australia']);
-
-console.log(filteredCountries)
-```
-
-#### Output
-
-```javascript
-[
-    {
-        "name": "India",
-        "code": "in",
-        "dial_code": "+91"
-    }, 
-    {
-        "name": "United States of America",
-        "code": "us",
-        "dial_code": "+1"
-    },
-    {
-        "name": "Australia",
-        "code": "au",
-        "dial_code": "+61"
-    }
-]
-```
+The repository uses TypeScript, TSLint and Mocha. `npm run build` emits `lib/`, which is the package’s declared runtime/type entry point. `npm run format` rewrites TypeScript source; inspect the diff before committing. See [the lookup implementation](src/index.ts) and [package.json](package.json) for the current toolchain.
