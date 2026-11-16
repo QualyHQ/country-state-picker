@@ -25,6 +25,12 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
 - **Credentials:** never a personal token. `npm ci` fails with 401/403 on `@qualyhq` packages? Call
   the support-core MCP tool `dev_credential_issue` (`scope: npm:qualyhq:read`, a reason) and run the
   `usage` command it returns; it lasts 1 h (standards `docs/agents/credentials.md`).
+- **Google Cloud reads** for Qualy projects (logs, Cloud Run, Cloud Build, Artifact Registry;
+  `dev_gcloud(["help"])` lists the rest): call the support-core MCP tool `dev_gcloud` with the
+  arguments you would type after `gcloud` and a short reason; it needs the developer role. Not a
+  local `gcloud` login; tool missing, ask your user. Never paste its output into issues, PRs,
+  commits or messages; tell your user what you found in your own words. A refused command: say so
+  and ask for it, never work around it. NexPay is out of scope (standards `docs/agents/google-cloud.md`).
 - **Words users see:** sector-agnostic, no education terms (contact, supplier or partner, item,
   tenant); say "split", never "commission".
 - **No regressions:** we move money, so tests lock in current behaviour and a behaviour change
@@ -67,4 +73,8 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
   `Implements: IDEA-…` (`Idea: IDEA-…` for related). Then confirm the link with the Qualy MCP
   `ticket_link_add`. The ticket follows the PR on its own; never close a ticket or email a customer
   because a PR merged.
+- **Projects** (support-core ADR-064): every PR body also carries `Project: PRJ-…` (or
+  `Milestone: MS-…`), or `Project: none` when it belongs to no project. When the work is big enough
+  to be a project and none fits (Qualy MCP `project_list`, `project_items_for`), suggest one with
+  `project_create`; it stays a suggestion until a person accepts it. Never accept it yourself.
 <!-- /agent-rules:core -->
