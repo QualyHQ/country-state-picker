@@ -37,7 +37,8 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
   must turn something red. Cover every path and money edge case, not the happy path; a bug fix
   ships with its test (standards `docs/agents/testing.md`).
 - **ADRs:** a big feature, a money or auth change, or anything hard to reverse gets an ADR,
-  `Proposed` before you build and accepted by the owner (standards `docs/agents/adr.md`).
+  `Proposed` with a module map and data shape (or `None: <reason>`) before you build, accepted by the owner (how: the
+  QualyHQ/standards repo, `docs/agents/adr.md`).
 - **Lint and CI rules:** check what lint, the hooks and CI already enforce before writing code, and
   never silence them (`eslint-disable`, `@ts-ignore`, skipped tests) to get green.
 - **Qualy MCP** (product analytics, tickets, production data by impersonation): use it before
@@ -68,13 +69,11 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
   coming? `gh pr ready --undo` until it's in.
 - **Merged isn't done:** watch `master`'s run for your merge commit, promote, and report it live or
   say what stopped it. An "Advisory blocks the deploy" warning means it won't deploy yet.
-- **Tickets and ideas** (support-core ADR-062): a PR that fixes a support ticket carries
-  `Fixes: TKT-…` in its body (`Ticket: TKT-…` for related work); one that builds an idea carries
-  `Implements: IDEA-…` (`Idea: IDEA-…` for related). Then confirm the link with the Qualy MCP
-  `ticket_link_add`. The ticket follows the PR on its own; never close a ticket or email a customer
-  because a PR merged.
-- **Projects** (support-core ADR-064): every PR body also carries `Project: PRJ-…` (or
-  `Milestone: MS-…`), or `Project: none` when it belongs to no project. When the work is big enough
-  to be a project and none fits (Qualy MCP `project_list`, `project_items_for`), suggest one with
-  `project_create`; it stays a suggestion until a person accepts it. Never accept it yourself.
+- **Tickets, ideas and projects** (support-core ADR-062, ADR-064): before opening a PR, read the
+  projects (Qualy MCP `project_list`; `project_items_for` on its ticket or idea) and tell the user
+  which fit, best first. None fits and the work is project-sized: recommend a new one
+  (`project_create` makes a suggestion a person accepts; never accept it yourself); small work is
+  `Project: none`. The body carries `Project: PRJ-…` or `Milestone: MS-…` (the PR template check
+  fails without one), plus `Fixes:`/`Ticket: TKT-…` and `Implements:`/`Idea: IDEA-…`; confirm
+  ticket links with `ticket_link_add`. Merging never closes a ticket or emails a customer.
 <!-- /agent-rules:core -->
