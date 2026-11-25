@@ -25,20 +25,24 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
 - **Credentials:** never a personal token. `npm ci` fails with 401/403 on `@qualyhq` packages? Call
   the support-core MCP tool `dev_credential_issue` (`scope: npm:qualyhq:read`, a reason) and run the
   `usage` command it returns; it lasts 1 h (standards `docs/agents/credentials.md`).
-- **Google Cloud reads** for Qualy projects (logs, Cloud Run, Cloud Build, Artifact Registry;
-  `dev_gcloud(["help"])` lists the rest): call the support-core MCP tool `dev_gcloud` with the
-  arguments you would type after `gcloud` and a short reason; it needs the developer role. Not a
-  local `gcloud` login; tool missing, ask your user. Never paste its output into issues, PRs,
-  commits or messages; tell your user what you found in your own words. A refused command: say so
-  and ask for it, never work around it. NexPay is out of scope (standards `docs/agents/google-cloud.md`).
+- **Google Cloud reads** (Qualy projects, not NexPay): the support-core MCP tool `dev_gcloud` (needs
+  the developer role; missing, ask your user), never a local `gcloud` login. Tell your user what you
+  found in your own words; never paste its output. A refused command is asked for, never worked
+  around (standards `docs/agents/google-cloud.md`).
 - **Words users see:** sector-agnostic, no education terms (contact, supplier or partner, item,
   tenant); say "split", never "commission".
+- **Copy:** before writing UI text, read standards `docs/agents/copy.md`.
 - **No regressions:** we move money, so tests lock in current behaviour and a behaviour change
   must turn something red. Cover every path and money edge case, not the happy path; a bug fix
   ships with its test (standards `docs/agents/testing.md`).
 - **ADRs:** a big feature, a money or auth change, or anything hard to reverse gets an ADR,
-  `Proposed` with a module map and data shape (or `None: <reason>`) before you build, accepted by the owner (how: the
-  QualyHQ/standards repo, `docs/agents/adr.md`).
+  `Proposed` before you build, accepted by the owner. It needs `## Module map` and `## Data shape`
+  headings, each a ```mermaid block (never ASCII art) or `None: <reason>`; pre-push and CI refuse it
+  otherwise (how: QualyHQ/standards `docs/agents/adr.md`).
+- **Extend before you add a module:** find the module that owns the entity or flow and extend it
+  (a lane behind its service, entry point and job machinery; sub-modules inside it to stay organised
+  are fine). A new module, route prefix or entity only for a new responsibility the ADR's Module map
+  shows, with its `Reuse:` line (standards `docs/agents/modules.md`).
 - **Lint and CI rules:** check what lint, the hooks and CI already enforce before writing code, and
   never silence them (`eslint-disable`, `@ts-ignore`, skipped tests) to get green.
 - **Qualy MCP** (product analytics, tickets, production data by impersonation): use it before
@@ -48,25 +52,26 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
 - **MCP tools are part of the feature:** every new feature or endpoint ships the MCP tools an LLM
   needs to use it, as a first-class interface like the UI and API, or the PR's Details say why none
   (standards `docs/agents/mcp.md`).
+- **Docs are part of the feature:** a new feature or a material UI change updates the training
+  guides in `QualyHQ/pws`; a new or changed API updates `QualyHQ/docs`. Each in its own PR, all linked
+  both ways (standards `docs/agents/training.md`).
 - **Slow machine?** Run `node scripts/dev-machine-check.mjs` from QualyHQ/standards.
 
 ## Pull requests
 
 - **Master** takes changes by PR only. Open PRs as drafts; CI runs when `gh pr ready <n>`.
-- **Open the PR complete, in one command:** body from the template (`## Summary` first, filled) and
-  a risk label only when one applies. The checks run on open, so a later fix leaves a red run.
+- **Open the PR complete, in one command:** body from the template (`## Summary` filled, the
+  `Project:` line below) and a risk label only when one applies. Checks run on open, so a later fix leaves a red run.
 - **Before `gh pr ready`,** at the worker limit under Tests: lint, typecheck, the related tests, the whole suite when
   you changed shared code; and an independent review (Codex or Kimi via `peer`, else a fresh
   sub-agent). Detail: standards `docs/agents/pull-requests.md` and `docs/agents/reviews.md`.
-- **After opening a PR:** watch it and fix it yourself until it merges, without being asked. In the
-  Claude Code desktop app, turn on Auto-fix and CI monitor as soon as it opens. Merge on `ci-gate`.
+- **After opening a PR:** watch it and fix it yourself until it merges, without being asked (in the
+  Claude desktop app, turn on Auto-fix and CI monitor). Merge on `ci-gate`.
   Reproduce each failure locally, fix the cause, batch related fixes into one push. Never skip a
   test or bypass a gate; ask the owner after 3 failed attempts or when it needs a product decision.
-- **Push in batches:** commit locally as often as you like, push when a piece of work is done,
-  not after every small commit. Each push of a ready PR is a full CI run.
-- **One push per round on a ready PR:** every push reruns its whole CI tier. Iterate in the draft;
-  collect all fixes (review, CI, follow-ups) into one push; never push to see what CI says. More
-  coming? `gh pr ready --undo` until it's in.
+- **Push in batches:** every push to a ready PR reruns its whole CI tier. Commit locally as often as
+  you like; iterate in the draft and push each round's fixes (review, CI, follow-ups) at once, never
+  to see what CI says. More coming? `gh pr ready --undo` until it's in.
 - **Merged isn't done:** watch `master`'s run for your merge commit, promote, and report it live or
   say what stopped it. An "Advisory blocks the deploy" warning means it won't deploy yet.
 - **Tickets, ideas and projects** (support-core ADR-062, ADR-064): before opening a PR, read the
