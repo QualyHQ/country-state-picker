@@ -39,21 +39,20 @@ read on demand: `gh api repos/QualyHQ/standards/contents/docs/agents/<x>.md -H '
   `Proposed` before you build, accepted by the owner. It needs `## Module map` and `## Data shape`
   headings, each a ```mermaid block (never ASCII art) or `None: <reason>`; pre-push and CI refuse it
   otherwise (how: QualyHQ/standards `docs/agents/adr.md`).
-- **Extend before you add a module:** find the module that owns the entity or flow and extend it
-  (a lane behind its service, entry point and job machinery; sub-modules inside it to stay organised
-  are fine). A new module, route prefix or entity only for a new responsibility the ADR's Module map
-  shows, with its `Reuse:` line (standards `docs/agents/modules.md`).
-- **Lint and CI rules:** check what lint, the hooks and CI already enforce before writing code, and
-  never silence them (`eslint-disable`, `@ts-ignore`, skipped tests) to get green.
+- **Extend before you add a module:** extend the module that owns the entity or flow (sub-modules are
+  fine). A new module, route prefix or entity only for a new responsibility in the ADR's Module map,
+  with its `Reuse:` line (standards `docs/agents/modules.md`).
+- **Lint and CI rules:** check what lint, the hooks and CI enforce before writing code, and never
+  silence them (`eslint-disable`, `@ts-ignore`, skipped tests) to get green.
 - **Qualy MCP** (product analytics, tickets, production data by impersonation): use it before
-  guessing, read-only, and never copy real data out. Read standards `docs/agents/qualy-mcp.md` first.
-- **Instrumentation is part of the feature:** decide what we will want to know about a new feature
-  and add its events in the same change (standards `docs/agents/analytics.md`).
-- **MCP tools are part of the feature:** every new feature or endpoint ships the MCP tools an LLM
-  needs to use it, as a first-class interface like the UI and API, or the PR's Details say why none
-  (standards `docs/agents/mcp.md`).
+  guessing, read-only, and never copy real data out (standards `docs/agents/qualy-mcp.md`).
+- **Instrumentation is part of the feature:** a new feature adds the events we will want to know
+  about, in the same change (standards `docs/agents/analytics.md`).
+- **MCP tools and apps are part of the feature:** a new feature or endpoint ships its MCP tools, or
+  the PR's Details say why none (standards `docs/agents/mcp.md`). In dashboard, kit, mcp-apps and
+  core, a change to a record screen, wording, action or tool output checks its apps (`mcp-apps.md`).
 - **Docs are part of the feature:** a new feature or a material UI change updates the training
-  guides in `QualyHQ/pws`; a new or changed API updates `QualyHQ/docs`. Each in its own PR, all linked
+  guides in `QualyHQ/pws`; a new or changed API updates `QualyHQ/docs`. Each its own PR, linked
   both ways (standards `docs/agents/training.md`).
 - **Slow machine?** Run `node scripts/dev-machine-check.mjs` from QualyHQ/standards.
 
